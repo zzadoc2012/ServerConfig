@@ -1,0 +1,193 @@
+{
+  "configs": [
+    {
+      "name": "히스토리(History) 적용",
+      "values": {
+        "VSS/VSP": "PxHistory:Enable=true",
+        "S4": "PxHistory:Enable=true",
+        "VSX": "PhoenixHistoryMission:Enable:VSX=true",
+        "MAX": "PhoenixHistoryMission:Enable:MAX=true"
+      }
+    },
+    {
+      "name": "프리 플레이 On",
+      "values": {
+        "VSS/VSP": "$Coin:FreePlay=1\n$MenuEnabled:CoinAssignment:FreeSetting:FreePlay=1",
+        "S4": "$Coin:FreePlay=1\n$MenuEnabled:CoinAssignment:FreeSetting:FreePlay=1",
+        "VSX": "COIN_OPTION_FREE_PLAY=Yes\nCOIN_OPTION_FREE_PLAY:Active=1",
+        "MAX": "#COIN_OPTION_FREE_PLAY=Yes"
+      }
+    },
+    {
+      "name": "프리 플레이 Off",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "",
+        "MAX": "#COIN_OPTION_FREE_PLAY=No"
+      }
+    },
+    {
+      "name": "파티게임 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "PARTYGAME:MENU:STATE=1\nPARTYGAME:MENU:SLIDE=1\nPARTYGAME:MENU:STATE=1\nPARTYGAME:MENU:SLIDE=1\nFUNZONE_GAME_SNIPER_PLUS:Active=1\nFUNZONE_GAME_QUIZ:Active=1\nFUNZONE_GAME_ROPECLIMB:Active=1\nFUNZONE_GAME_FISHING_LITE:Active=1\nFUNZONE_GAME_MINI_COUNTUP:Active=1\nMENUSETTING_FUNZONE_SNIPER_PLUS=Enable\nMENUSETTING_FUNZONE_QUIZ=Enable\nMENUSETTING_FUNZONE_ROPECLIMB=Enable\nMENUSETTING_FUNZONE_FISHING_LITE=Enable\nMENUSETTING_FUNZONE_SNIPER_PLUS:Active=1\nMENUSETTING_FUNZONE_QUIZ:Active=1\nMENUSETTING_FUNZONE_ROPECLIMB:Active=1\nMENUSETTING_FUNZONE_FISHING_LITE:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "애니멀 파크 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "MENUSETTING_FUNZONE_ANIMALPARK=Enable\nMENUSETTING_FUNZONE_COLLECTER=Hide",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "다트레벨 체크 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "MENUSETTING_PRACTICE_DARTLEVELTEST=Enable\nMENUSETTING_PRACTICE_DARTLEVELTEST:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "AE 타임크레딧 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "COIN_ASSIGNEMNT_ARAB_TIME_CREDIT=Yes\nCOIN_ASSIGNEMNT_ARAB_TIME_CREDIT:Active=1\nARABTIMECREDIT_OPTION_PLAY=On\nArabTimeCredit:Enable=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "펀가이드(어워드) 적용",
+      "values": {
+        "VSS/VSP": "FunAward:Enable=1\nFunAward:Default:Use=1",
+        "S4": "",
+        "VSX": "NewStyleUI:BeginnerUI=true\nNewStyleUI:Ingame:MemeAward=true\nNewStyleUI:Ingame:ReplayBoard=true\nArabStyleUI:Ingame:UI=true\nArabStyleUI:Ingame:Body=true\nDefaultDartBoardType=1\nNewStyleUI:Ingame:BGM=true\nFunDarts:Enable=true\nChartGraph:Enable=true\nChartGraph:Open=true",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "후불제 적용",
+      "values": {
+        "VSS/VSP": "PostPaid:Enable=1\n$M:V:8008:Show=1",
+        "S4": "",
+        "VSX": "",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "뉴치어스 오픈 명렁어(맥주버전)",
+      "values": {
+        "VSS/VSP": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\n$M:V:6153:Show=1\n$M:V:6153:Show=0",
+        "S4": "",
+        "VSX": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\nNewCheersCanDrawBeer=true\nMENUSETTING_FUNZONE_CHEERS=Hide\nMENUSETTING_FUNZONE_CHEERS:Active=0",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "뉴치어스 오픈 명렁어(소다버전)",
+      "values": {
+        "VSS/VSP": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\n$M:V:6153:Show=1\n$M:V:6153:Show=1",
+        "S4": "",
+        "VSX": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\nNewCheersCanDrawBeer=false\nMENUSETTING_FUNZONE_CHEERS=Hide\nMENUSETTING_FUNZONE_CHEERS:Active=0",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "배틀다트 오픈 적용",
+      "values": {
+        "VSS/VSP": "BattleDart:Enable=1\nBattleDart:Use:SpaceSelect=1",
+        "S4": "BattleDart:Menu:Enable=true",
+        "VSX": "MENUSETTING_GVMSUB_BATTLEDARTS=Enable\nBattleDart:Use:SpaceSelect=true",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "더 챔피언 오픈 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "MENUSETTING_COMPETITION_THECHAMPIONSHIP=Enable\nMENUSETTING_COMPETITION_THECHAMPIONSHIP:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "온라인 토너먼트 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "MENUSETTING_COMPETITION_TOURNAMENT=Enable\nMENUSETTING_COMPETITION_TOURNAMENT:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "P.TOS(머신스타일) 활성화 적용",
+      "values": {
+        "VSS/VSP": "$MenuEnabled:MachineStyle:MenuStyle=1",
+        "S4": "",
+        "VSX": "MACHINE_STYLE:Active=1\nMenuEnabled:MachineStyle:MenuStyle=1\nMACHINE_STYLE:OFFLINE:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "애플드랍 크리스마스 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "AppleDrop:EventType=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "언어변경 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "SYSTEMSETTING_LANGUAGE_SETUP=1\nSYSTEMSETTING_LANGUAGE_SETUP:Active=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "오토 라인업 설정 적용(1Set 모든 Leg)",
+      "values": {
+        "VSS/VSP": "League:LineUp:AutoRegisterLegsMode=true",
+        "S4": "League:LineUp:AutoRegisterLegsMode=true",
+        "VSX": "League:LineUp:AutoRegisterLegsMode=true",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "Revolution 메뉴 Open",
+      "values": {
+        "VSS/VSP": "$M:V:1008=1\n$M:V:1008:Show=1",
+        "S4": "GlobalOnlineBattle:Enable=1\nM:V:1008=1",
+        "VSX": "MENUSETTING_COMPETITION_GOB=Enable\nGlobalOnlineBattle:Enable=true\nMENUSETTING_COMPETITION_GOB:Active=0",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "멀티비전 활성화 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "MultiVision:Enable=1",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "GVM Mission 활성화 적용",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "GVMMission:Enable=true",
+        "MAX": ""
+      }
+    }
+  ]
+}

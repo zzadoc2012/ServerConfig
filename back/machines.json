@@ -1,0 +1,15 @@
+[
+  {"code": "171", "type": "VSS", "ip": "172.16.1.171", "mac": "D45D6427ED4F", "name": "VSS-171"},
+  {"code": "172", "type": "VSS", "ip": "172.16.1.172", "mac": "88AD43F8795B", "name": "VSS-172"},
+  {"code": "173", "type": "VSS", "ip": "172.16.1.173", "mac": "7085C2A25413", "name": "VSS-173"},
+  {"code": "174", "type": "VSP", "ip": "172.16.1.174", "mac": "B06EBF5C2DB5", "name": "VSP-174"},
+  {"code": "166", "type": "VSX", "ip": "172.16.1.166", "mac": "DCFE071FF41E", "name": "VSS-166"},
+  {"code": "180", "type": "VSX", "ip": "172.16.1.180", "mac": "50EBF6B83048", "name": "VSX-180"},
+  {"code": "181", "type": "VSX", "ip": "172.16.1.181", "mac": "283638D020BB", "name": "VSX-181"},
+  {"code": "182", "type": "VSX", "ip": "172.16.1.182", "mac": "283638D02077", "name": "VSX-182"},
+  {"code": "183", "type": "VSX", "ip": "172.16.1.183", "mac": "50EBF63EFDF1", "name": "VSX-183"},
+  {"code": "184", "type": "VSX", "ip": "172.16.1.184", "mac": "50EBF622C465", "name": "VSX-184"},
+  {"code": "158", "type": "VSX", "ip": "172.16.1.158", "mac": "283638D0269D", "name": "VSX-158(대회의실'우'"},
+  {"code": "159", "type": "VSX", "ip": "172.16.1.159", "mac": "283638D0235F", "name": "VSX-159(대회의실'좌'"},
+  {"code": "151", "type": "MAX", "ip": "172.16.1.151", "mac": "3C7C3FB8791B", "name": "MAX-151"}
+]

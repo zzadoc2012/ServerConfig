@@ -7,6 +7,11 @@ dist/
 *.spec.bak
 .idea/
 .vscode/
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.cxx/
 *.log
 credentials.dat
 key.bin

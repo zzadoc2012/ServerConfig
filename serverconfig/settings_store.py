@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from serverconfig.paths import user_data_dir
 from serverconfig.win_dpapi import protect, unprotect
 
-ACCOUNT_KEYS = ("test_admin", "live_admin", "ssh", "jenkins")
+ACCOUNT_KEYS = ("test_admin", "live_admin")
 
 DEFAULT_ACCOUNTS = {
     "test_admin": {
@@ -17,18 +17,6 @@ DEFAULT_ACCOUNTS = {
     "live_admin": {
         "name": "Live Admin",
         "address": "https://admin.phoenixdarts.com/",
-        "user_id": "",
-        "password": "",
-    },
-    "ssh": {
-        "name": "SSH",
-        "address": "",
-        "user_id": "",
-        "password": "",
-    },
-    "jenkins": {
-        "name": "Jenkins",
-        "address": "",
         "user_id": "",
         "password": "",
     },

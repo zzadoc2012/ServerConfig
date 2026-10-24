@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="머신 선택"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/machineSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox android:id="@+id/typeVss" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" android:text="VSS/VSP" />
+                <CheckBox android:id="@+id/typeS4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" android:text="S4" />
+                <CheckBox android:id="@+id/typeVsx" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" android:text="VSX" />
+                <CheckBox android:id="@+id/typeMax" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" android:text="MAX" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/machineInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="위치: -"
+                    android:textIsSelectable="true" />
+
+                <Button
+                    android:id="@+id/copyMacButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="Copy" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="운영 환경 선택"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/envGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/envTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="테스트 어드민" />
+
+                <RadioButton
+                    android:id="@+id/envLive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="라이브 어드민" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="컨피그 선택"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/configSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+            <Button
+                android:id="@+id/runButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:text="실행" />
+
+            <TextView
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#F4F4F4"
+                android:minHeight="80dp"
+                android:padding="8dp"
+                android:textIsSelectable="true" />
+
+            <TextView
+                android:id="@+id/logView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="120dp"
+                android:padding="8dp"
+                android:textIsSelectable="true" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

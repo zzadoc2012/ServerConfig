@@ -25,9 +25,13 @@ def main() -> None:
     assert ok and "PxHistory:Enable=true" in s4
     free_vss, ok = book.value(freeplay, excel_column("VSS"))
     assert ok and "$Coin:FreePlay=1" in free_vss
+    assert not free_vss.startswith("\t") and not free_vss.startswith(" ")
+    assert free_vss.startswith("$Coin:FreePlay=1")
     free_vsx, ok = book.value(freeplay, excel_column("VSX"))
     assert ok and "COIN_OPTION_FREE_PLAY=Yes" in free_vsx
-    print("excel_ok", book.names)
+    vss_names = book.names_for_column(excel_column("VSS"))
+    assert history in vss_names
+    print("excel_ok", book.names, "vss", vss_names)
 
 
 if __name__ == "__main__":

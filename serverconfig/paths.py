@@ -15,13 +15,7 @@ def bundled_dir() -> Path:
 
 
 def data_file(name: str) -> Path:
-    nearby = app_dir() / "data" / name
-    if nearby.exists():
-        return nearby
-    bundled = bundled_dir() / "data" / name
-    if bundled.exists():
-        return bundled
-    return nearby
+    return bundled_dir() / "data" / name
 
 
 def user_data_dir() -> Path:

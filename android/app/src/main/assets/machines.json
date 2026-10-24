@@ -1,0 +1,17 @@
+[
+  {"code": "171", "type": "VSS", "ip": "172.16.1.171", "mac": "D45D6427ED4F", "Location": ""},
+  {"code": "172", "type": "VSS", "ip": "172.16.1.172", "mac": "88AD43F8795B", "Location": ""},
+  {"code": "173", "type": "VSS", "ip": "172.16.1.173", "mac": "7085C2A25413", "Location": ""},
+  {"code": "174", "type": "VSP", "ip": "172.16.1.174", "mac": "B06EBF5C2DB5", "Location": ""},
+  {"code": "180", "type": "VSX", "ip": "172.16.1.180", "mac": "50EBF6B83048", "Location": ""},
+  {"code": "181", "type": "VSX", "ip": "172.16.1.181", "mac": "283638D020BB", "Location": ""},
+  {"code": "182", "type": "VSX", "ip": "172.16.1.182", "mac": "283638D02077", "Location": ""},
+  {"code": "183", "type": "VSX", "ip": "172.16.1.183", "mac": "50EBF63EFDF1", "Location": ""},
+  {"code": "184", "type": "VSX", "ip": "172.16.1.184", "mac": "50EBF622C465", "Location": ""},
+  {"code": "164", "type": "VSX", "ip": "172.16.1.164", "mac": "50EBF6B82B02", "Location": "휴게실"},
+  {"code": "165", "type": "VSS", "ip": "172.16.1.165", "mac": "F02F742F9EC7", "Location": "휴게실"},
+  {"code": "166", "type": "VSS", "ip": "172.16.1.166", "mac": "DCFE071FF41E", "Location": "휴게실"},
+  {"code": "158", "type": "VSX", "ip": "172.16.1.158", "mac": "283638D0269D", "Location": "대회의실'우'"},
+  {"code": "159", "type": "VSX", "ip": "172.16.1.159", "mac": "283638D0235F", "Location": "대회의실'좌'"},
+  {"code": "151", "type": "MAX", "ip": "172.16.1.151", "mac": "3C7C3FB8791B", "Location": "사무실 입구"}
+]

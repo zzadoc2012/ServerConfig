@@ -1,0 +1,541 @@
+<html lang="ko"><head>
+<title>Admin PHOENIXDART - Global Site</title>
+<link href="https://test-www.phoenixdarts.com/ico.ico" rel="shortcut icon">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/common01.css">
+<link rel="stylesheet" type="text/css" href="/css/board.css?v=1792561435">
+<link rel="stylesheet" type="text/css" href="/css/flexigrid.css">
+<!--link rel="stylesheet" type="text/css" href="/css/dtree.css" /-->
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css?v=?v=1.10.3">
+<link rel="stylesheet" type="text/css" href="/css/global_admin.css">
+
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/common.js?v=0.1.2"></script>
+<script type="text/javascript" src="/js/dtree.js"></script>
+<script type="text/javascript" src="/js/jquery.blockUI.js"></script>
+</head>
+
+<body>
+<div style="display: none; background-image: url(/images/bodybg.gif);position: absolute; left: 200px; top: 0px; width: 483px; height: 454px; border: 2px solid #b0b0b0;padding:0px;" id="userpflayer"></div>
+<div id="heightgrid">
+	<div id="wrapper">
+		<!-- Menu -->
+		<div id="header">
+			<h1>
+				<a href="/"><img src="/images/admin_logo.png" alt="PHOENIXDARTS"></a>
+							</h1>
+
+            <div class="hello">
+				<span>zzadoc (Super Master's)</span> <a href="/logout" class="btn02 sPad">LOGOUT</a>
+			</div>
+
+			<ul class="lnb">
+												<li class="off">
+						<a href="/basic/adminList">Basic Code</a>
+					</li>
+													<li class="off">
+						| <a href="/nationsetup/beginner_bannerList">Setting for each country</a>
+					</li>
+													<li class="off">
+						| <a href="/shop/nshop_list">Shop Management</a>
+					</li>
+													<li class="on">
+						| <a href="/machine/log_control">Machine</a>
+					</li>
+													<li class="off">
+						| <a href="/members/users">User</a>
+					</li>
+													<li class="off">
+						| <a href="/statistics/statis_online">Statistics</a>
+					</li>
+													<li class="off">
+						| <a href="/ad/adMsg">Advertisement</a>
+					</li>
+													<li class="off">
+						| <a href="/app/push-message/history-list">App</a>
+					</li>
+													<li class="off">
+						| <a href="/board/boardManageList">Bulletin board</a>
+					</li>
+													<li class="off">
+						| <a href="/event/wdbk_evt_1">Event</a>
+					</li>
+													<li class="off">
+						| <a href="/rally/tournament">Tournament/Event</a>
+					</li>
+													<li class="off">
+						| <a href="/credit/pre_give">Credit</a>
+					</li>
+													<li class="off">
+						| <a href="/competition/search">Competition</a>
+					</li>
+													<li class="off">
+						| <a href="/basic/adminView">Administrator Profile</a>
+					</li>
+													<li class="off">
+						| <a href="/kpi/bookdata">KPI</a>
+					</li>
+							</ul>
+		</div>
+		<!--// Menu -->
+
+		<!-- container -->
+		<div id="container">
+						<div class="snb">
+				<p class="tit">Machine</p>
+                <ul>
+									<li class="on"><a href="/machine/log_control">Log Control</a></li>
+									<li class="off"><a href="/machine/entry_fee">BookData</a></li>
+									<li class="off"><a href="/machine/machine_hdd_change">HDD Change Log</a></li>
+									<li class="off"><a href="/machine/stars_stats">Stars Stats</a></li>
+									<li class="off"><a href="/machine/vs_game_count">VERSUS MOVIE</a></li>
+									<li class="off"><a href="/machine/machine-cp">Machine CP</a></li>
+									<li class="off"><a href="/machine/machine-promotion">Machine Promotion</a></li>
+									<li class="off"><a href="/machine/machine_play_information">Machine Play Information</a></li>
+									<li class="off"><a href="/machine/bookdata_and_gamedata">BookData &amp; GameData</a></li>
+									<li class="off"><a href="/machine/marketing_basic">Marketing Basic Data</a></li>
+									<li class="off"><a href="/machine_qrcode_generation/">Machine QRcode Generation</a></li>
+									<li class="off"><a href="/machine_count/view">Daily Machine Count</a></li>
+									<li class="off"><a href="/intro_sound/template">Voice Sound</a></li>
+								</ul>
+
+			</div>
+			
+<script type="text/javascript">
+
+var list_make = function(data) {
+	$.unblockGlobal();
+	var col_array = ['2%', '2%','4%','7%', '5%'
+		, '3%', '5%', '4%', '5%'
+		, '5%', '4%', '2%', '2%', '2%', '2%'
+		, '7%'  , '3%' 		, '3%', '3%', '2%','3%','4%', '4%', '4%', '3%'
+		, '4%', '7%'
+	];
+	var tr_array = ['<input type="checkbox" onclick=\'allCheck(this,"machine_seq[]");\'/>', 'No', 'Machine Seq', 'MAC(HEX)', 'machine Serial'
+		, 's_seq', 'ShopName', 'CurrentVer', 'CheckTime'
+		, 'LastOnline', 'Is Online In', 'Log On', 'Line On', 'Tunneling', 'IDC On'
+		, 'Config'  , 'Execute' 		, 'Type', 'H/W', 'is_LED', 'is_LED_temp', 'Dealer', 'Manager', 'Place', 'Nation'
+		, 'Local', 'Last Access IP'
+	];
+	var tr_html = tr_html_make(col_array, tr_array);
+
+	for(i=0; i<data.list_data.length; i++) {
+		tr_html += "<tr>\n";
+		tr_html += "<td><input type=\"checkbox\" name=\"machine_seq[]\" value=\""+ data.list_data[i].machine_seq +"\" /></td>\n";
+		tr_html += "<td>" + data.list_data[i].no + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].machine_seq + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].machex + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].machineserial + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].s_seq + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].shop_name + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].currentversion + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].check_dt + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].lastonline + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].isonline + "</td>\n";
+
+		tr_html += "<td><input type=\"checkbox\" onClick=\"change_on_off('"+data.list_data[i].machine_seq+"', this.checked);\" id=\"log_checkbox_"+data.list_data[i].machine_seq+"\"";
+		tr_html += (data.list_data[i].loguse == "on") ? " checked></td>\n" : "></td>\n";
+
+		tr_html += "<td><input type=\"checkbox\" onClick=\"change_line_on_off('"+data.list_data[i].machine_seq+"', this.checked);\" id=\"line_checkbox_"+data.list_data[i].machine_seq+"\"";
+		tr_html += (data.list_data[i].lineuse == "on") ? " checked></td>\n" : "></td>\n";
+
+		tr_html += "<td><input type=\"checkbox\" onClick=\"change_tunneling_on_off('"+data.list_data[i].machine_seq+"', this.checked);\" id=\"tunneling_checkbox_"+data.list_data[i].machine_seq+"\"";
+		tr_html += (data.list_data[i].tunneling_use == "on") ? " checked></td>\n" : "></td>\n";
+		
+		tr_html += "<td><input type=\"checkbox\" onClick=\"change_idc_on_off('"+data.list_data[i].machine_seq+"', this.checked);\" id=\"idc_checkbox_"+data.list_data[i].machine_seq+"\"";
+		tr_html += (data.list_data[i].idc_use == "on") ? " checked></td>\n" : "></td>\n";
+
+		tr_html += "<td><textarea rows=\"3\" cols=\"35\" name=\"txt_config_memo_"+data.list_data[i].machine_seq+"\" id=\"txt_config_memo_"+data.list_data[i].machine_seq+"\">" + data.list_data[i].config_memo + "</textarea></td>\n";
+
+					tr_html += "<td><button onClick=\"edit_config('"+data.list_data[i].machine_seq+"'); return false;\" >Edit</button></td>\n";
+		
+		tr_html += "<td>" + data.list_data[i].type + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].hardware_txt + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].is_led_official + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].is_led_temporary + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].dealer + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].manager_name + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].placename + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].nationcode + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].area + "</td>\n";
+		tr_html += "<td>" + data.list_data[i].lastaccess_ip + "</td>\n";
+		tr_html += "</tr>\n";
+	}
+
+	$("#list_table").html(tr_html);
+	$("#desc").text("* " + data.x + " data have been searched").show();
+	$("#paging").html(data.paging);
+	return;
+}
+
+var curr_page = 1;
+function list_load(page) {
+	$.blockGlobal();
+	curr_page = page;
+	$.ajax({
+		url: "/machine/log_control/page/"+page.toString().replace('/',''), type: 'POST', dataType: 'json', async: false, data: $("#frm").serialize() + '&list_load=1',
+		success: list_make,
+		error: errorHandle
+	});
+}
+
+$(document).ready(function(){
+	//list_load(1);
+});
+
+
+function edit_config(machine_seq){
+	var dataobj = $("#work_form").serialize() + "&mode=edit_config&machine_seq="+machine_seq;
+	if(confirm("Sure Edit?")) {
+		$.blockGlobal();
+		$.ajax({url:"/machine/log_control_prc", type: 'POST', dataType: 'json', async: false, data: dataobj,
+			success: function(res){
+				alert('Success');
+				$("#log_checkbox_"+machine_seq).attr('checked', (res.loguse=='on' ? true : false) );
+				$("#line_checkbox_"+machine_seq).attr('checked', (res.lineuse=='on' ? true : false) );
+				$.unblockGlobal();
+				//list_load(curr_page);
+			},
+			error: errorHandle
+		});
+    }
+    return;
+}
+
+function change_on_off( machine_seq, flag ){
+	var change_flag	= flag ? 'on' : 'off';
+	var dataobj			= {mode: 'change_on_off', machine_seq: machine_seq, change_flag:change_flag}
+
+	if( machine_seq == 'check' ){
+		var obj = $('#work_form');
+		var isfound = $("input[name='machine_seq[]']:checkbox:checked").length;
+
+		if(!isfound) {
+			alert("Select a player at least one!");
+			return;
+		}
+		else {
+			dataobj = $("#work_form").serialize() + "&mode=change_on_off&change_flag="+change_flag;
+		}
+	}
+
+	if(confirm("Sure Change?")) {
+		$.blockGlobal();
+		$.ajax({url:"/machine/log_control_prc", type: 'POST', dataType: 'json', async: false, data: dataobj,
+			success: function(res){
+				if(res.result == 1){
+					$.each(res.list, function(i){
+						$("#txt_config_memo_"+this.machine_seq).val( this.config_memo );
+						$("#log_checkbox_"+this.machine_seq).attr('checked', (change_flag=='on' ? true : false) );
+					});
+					alert('Success');
+				}
+				$.unblockGlobal();
+			}, // list_load,
+			error: errorHandle
+		});
+    }
+    else{
+    	// 변경하려다 취소를 하는거니까 반대로 체크시켜줌
+    	$("#log_checkbox_"+machine_seq).attr( 'checked' , (change_flag=='on' ? false : true) );
+    }
+}
+
+
+function change_line_on_off( machine_seq, flag ){
+	var change_flag	= flag ? 'on' : 'off';
+	var dataobj			= {mode: 'change_line_on_off', machine_seq: machine_seq, change_flag:change_flag}
+
+	if( machine_seq == 'check' ){
+		var obj = $('#work_form');
+		var isfound = $("input[name='machine_seq[]']:checkbox:checked").length;
+
+		if(!isfound) {
+			alert("Select a player at least one!");
+			return;
+		}
+		else {
+			dataobj = $("#work_form").serialize() + "&mode=change_line_on_off&change_flag="+change_flag;
+		}
+	}
+
+	if(confirm("Sure Change?")) {
+		$.blockGlobal();
+		$.ajax({url:"/machine/log_control_prc", type: 'POST', dataType: 'json', async: false, data: dataobj,
+			success: function(res){
+				if(res.result == 1){
+					$.each(res.list, function(i){
+						$("#txt_config_memo_"+this.machine_seq).val( this.config_memo );
+						$("#line_checkbox_"+this.machine_seq).attr('checked', (change_flag=='on' ? true : false) );
+					});
+					alert('Success');
+				}
+				$.unblockGlobal();
+			}, // list_load,
+			error: errorHandle
+		});
+    }
+    else{
+    	// 변경하려다 취소를 하는거니까 반대로 체크시켜줌
+    	$("#line_checkbox_"+machine_seq).attr( 'checked' , (change_flag=='on' ? false : true) );
+    }
+}
+
+
+function change_tunneling_on_off( machine_seq, flag ){
+	var change_flag	= flag ? 'on' : 'off';
+	var dataobj			= {mode: 'change_tunneling_on_off', machine_seq: machine_seq, change_flag:change_flag}
+
+	if( machine_seq == 'check' ){
+		var obj = $('#work_form');
+		var isfound = $("input[name='machine_seq[]']:checkbox:checked").length;
+
+		if(!isfound) {
+			alert("Select a player at least one!");
+			return;
+		}
+		else {
+			dataobj = $("#work_form").serialize() + "&mode=change_tunneling_on_off&change_flag="+change_flag;
+		}
+	}
+
+	if(confirm("Sure Change?"))
+	{
+		$.blockGlobal();
+		$.ajax({url:"/machine/log_control_prc", type: 'POST', dataType: 'json', async: false, data: dataobj,
+			success: function(res){
+				if(res.result == 1){
+					$.each(res.list, function(i){
+						$("#txt_config_memo_"+this.machine_seq).val( this.config_memo );
+						$("#tunneling_checkbox_"+this.machine_seq).attr('checked', (change_flag=='on' ? true : false) );
+					});
+					alert('Success');
+				}
+				$.unblockGlobal();
+			}, // list_load,
+			error: errorHandle
+		});
+    }
+    else{
+    	// 변경하려다 취소를 하는거니까 반대로 체크시켜줌
+    	$("#tunneling_checkbox_"+machine_seq).attr( 'checked' , (change_flag=='on' ? false : true) );
+    }
+}
+
+function change_idc_on_off( machine_seq, flag ){
+	var change_flag	= flag ? 'on' : 'off';
+	var dataobj			= {mode: 'change_idc_on_off', machine_seq: machine_seq, change_flag:change_flag}
+
+	if( machine_seq == 'check' ){
+		var obj = $('#work_form');
+		var isfound = $("input[name='machine_seq[]']:checkbox:checked").length;
+
+		if(!isfound) {
+			alert("Select a player at least one!");
+			return;
+		}
+		else {
+			dataobj = $("#work_form").serialize() + "&mode=change_idc_on_off&change_flag="+change_flag;
+		}
+	}
+
+	if(confirm("Sure Change?"))
+	{
+		$.blockGlobal();
+		$.ajax({url:"/machine/log_control_prc", type: 'POST', dataType: 'json', async: false, data: dataobj,
+			success: function(res){
+				if(res.result == 1){
+					$.each(res.list, function(i){
+						$("#txt_config_memo_"+this.machine_seq).val( this.config_memo );
+						$("#idc_checkbox_"+this.machine_seq).attr('checked', (change_flag=='on' ? true : false) );
+					});
+					alert('Success');
+				}
+				$.unblockGlobal();
+			}, // list_load,
+			error: errorHandle
+		});
+    }
+    else{
+    	// 변경하려다 취소를 하는거니까 반대로 체크시켜줌
+    	$("#tunneling_checkbox_"+machine_seq).attr( 'checked' , (change_flag=='on' ? false : true) );
+    }
+}
+</script>
+
+<style>
+table.list_board3 td, table.list_board2 td {text-align:left; padding-left:5px}
+table.list_board3 td.a-c {text-align:center; padding:5px}
+td.anchor {cursor:pointer;text-decoration:underline;color:#0066FF}
+.anchor:focus, .anchor:hover, .anchor:visited{text-decoration:none}
+table.list_board3 td p {width:150px; float:left; font-weight: bold; color:#666}
+.hist_list_box {border:2px solid #d4d4d4;border-bottom:0px; width:100%; margin-bottom:5px}
+.hist_list { display:none; text-align:center; width:100%; background-color:#fefefe; margin-bottom:5px}
+</style>
+
+<!-- contents -->
+<div class="contents">
+	<div class="titArea">
+		<h2>Log Control</h2>
+		<div class="location">
+			<a href="/">HOME</a> &gt;
+			<a href="/.//machine/log_control">Machine</a> &gt;
+			<span class="on">Log Control</span>
+		</div>
+	</div>
+
+	<div class="search">
+	<form name="frm" id="frm">
+		<table class="list_board3">
+			<tbody><tr>
+		    	<td>
+		    		<p>Nation</p>
+		    		<select name="nationcode" id="nationcode" class="select" onchange="comm_getDealer('', 'dealer', this.value);">
+												<option value="">ALL</option>
+																		<option value="AT">Austria</option>
+												<option value="AU">Australia</option>
+												<option value="BE">Belgium</option>
+												<option value="BN">Brunei</option>
+												<option value="BR">Brazil</option>
+												<option value="CA">Canada</option>
+												<option value="CH">Switzerland</option>
+												<option value="CN">China</option>
+												<option value="DE">Germany</option>
+												<option value="ES">Spain</option>
+												<option value="FR">France</option>
+												<option value="HK">HongKong</option>
+												<option value="HR">Croatia</option>
+												<option value="ID">Indonesia</option>
+												<option value="IN">India</option>
+												<option value="JP">Japan</option>
+												<option value="KH">Cambodia</option>
+												<option value="KR">Korea</option>
+												<option value="IE">Ireland</option>
+												<option value="MA">Morocco</option>
+												<option value="MY">Malaysia</option>
+												<option value="NC">New Caledonia</option>
+												<option value="NZ">New Zealand</option>
+												<option value="PT">Portugal</option>
+												<option value="RO">Romania</option>
+												<option value="SG">Singapore</option>
+												<option value="TH">Thailand</option>
+												<option value="TW">Taiwan</option>
+												<option value="UK">United Kingdom</option>
+												<option value="US">USA</option>
+												<option value="VN">Vietnam</option>
+												<option value="AE">United Arab Emirates</option>
+												<option value="LU">Luxembourg</option>
+												<option value="CZ">Czech</option>
+												<option value="MN">Mongolia</option>
+												<option value="SA">Saudi Arabia</option>
+											</select>
+		    	</td>
+		        <td>
+					<p>S_seq</p>
+					<input type="text" name="s_seq" id="s_seq" class="text" onkeyup="isNumeric(this);">
+				</td>
+				<td>
+					<p>Shop Name</p>
+					<input type="text" name="shopname" id="shopname" class="text">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Machine Seq</p>
+					<input type="text" name="machine_seq" id="machine_seq" class="text">
+				</td>
+				<td>
+					<p>Mac Addr</p>
+					<input type="text" name="machine_no" id="machine_no" class="text">
+				</td>
+				<td>
+					<p>Machine S/N</p>
+					<input type="text" name="machineserial" id="machineserial" class="text">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Machine Type</p>
+					<select name="machine_model_code">
+						<option value="">ALL</option>
+												<option value="1">PX1</option>
+												<option value="2">VSP</option>
+												<option value="3">VSS</option>
+												<option value="4">D-1X</option>
+												<option value="5">S4</option>
+												<option value="6">VSQ</option>
+												<option value="7">MAX</option>
+												<option value="8">VSX</option>
+												<option value="9">VS5</option>
+											</select>
+				</td>
+				<td>
+					<p>Hardware Version</p>
+					<select name="hardware_version">
+						<option value="0">ALL</option>
+												<option value="0">-</option>
+												<option value="87">PX1</option>
+												<option value="88">D-1X</option>
+												<option value="89">VSP</option>
+												<option value="90">VSS</option>
+												<option value="91">S4</option>
+												<option value="92">S4 KIT</option>
+												<option value="93">VSC</option>
+												<option value="94">C4</option>
+												<option value="95">C4 KIT</option>
+												<option value="108">D-1X KIT</option>
+												<option value="111">VSQ</option>
+												<option value="112">G1</option>
+												<option value="113">G2</option>
+												<option value="118">VSP-S</option>
+												<option value="120">MAX</option>
+												<option value="122">VSX(HIGH)</option>
+												<option value="125">VSX(LOW)</option>
+												<option value="130">VS5</option>
+											</select>
+				</td>
+				<td>
+					<p>Dealer</p>
+					<select id="dealer" name="dealer" class="select">
+						<option value="">:: Select ::</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Log Flag</p>
+					<select name="logflag">
+						<option value="all">All</option>
+						<option value="on">On</option>
+						<option value="off">Off</option>
+					</select>
+				</td>
+				<td>
+					<p>Line Flag</p>
+					<select name="lineflag">
+						<option value="all">All</option>
+						<option value="on">On</option>
+						<option value="off">Off</option>
+					</select>
+				</td>
+				<td>
+					<p>Tunneling</p>
+					<select name="tunnelingflag">
+						<option value="all">All</option>
+						<option value="on">On</option>
+						<option value="off">Off</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>IDC Flag</p>
+					<select name="idcflag">
+						<option value

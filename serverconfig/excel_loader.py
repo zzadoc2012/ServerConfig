@@ -25,11 +25,13 @@ class ConfigWorkbook:
             names: List[str] = []
             rows: Dict[str, Dict[str, str]] = {}
             for values in sheet.iter_rows(min_row=2, values_only=True):
-                name = self._cell(values, header_map["Config Name"])
+                name = self._cell(values, header_map["Config Name"], command=False)
                 if not name:
                     continue
                 names.append(name)
-                rows[name] = {header: self._cell(values, header_map[header]) for header in TYPE_HEADERS}
+                rows[name] = {
+                    header: self._cell(values, header_map[header], command=True) for header in TYPE_HEADERS
+                }
             if not names:
                 raise ValueError("Config Name 행을 찾지 못했습니다.")
             self.names = names
@@ -45,6 +47,14 @@ class ConfigWorkbook:
         raw = self.rows[config_name][column]
         return raw, raw != ""
 
+    def names_for_column(self, column: str) -> List[str]:
+        names = []
+        for name in self.names:
+            _value, has_value = self.value(name, column)
+            if has_value:
+                names.append(name)
+        return names
+
     @staticmethod
     def _header_map(header_row) -> Dict[str, int]:
         mapping = {}
@@ -59,7 +69,20 @@ class ConfigWorkbook:
         return mapping
 
     @staticmethod
-    def _cell(values, index: int) -> str:
+    def _cell(values, index: int, command: bool = False) -> str:
         if index >= len(values) or values[index] is None:
             return ""
-        return str(values[index]).replace("\r\n", "\n")
+        text = str(values[index]).replace("\r\n", "\n")
+        if not command:
+            return text.strip()
+        return normalize_config_text(text)
+
+
+def normalize_config_text(text: str) -> str:
+    lines = (text or "").replace("\r\n", "\n").split("\n")
+    cleaned = [line.strip() for line in lines]
+    while cleaned and cleaned[0] == "":
+        cleaned.pop(0)
+    while cleaned and cleaned[-1] == "":
+        cleaned.pop()
+    return "\n".join(cleaned)
