@@ -1,6 +1,8 @@
 package com.phoenixdarts.serverconfig
 
 object ConfigMerge {
+    const val RESET_KEEP_LINE = "Cam:Use:Online=1"
+
     fun normalize(text: String): String {
         val cleaned = text.replace("\r\n", "\n").split("\n").map { it.trim() }.toMutableList()
         while (cleaned.isNotEmpty() && cleaned.first() == "") cleaned.removeAt(0)
@@ -20,6 +22,8 @@ object ConfigMerge {
         val body = if (kept.isEmpty()) commandLines else kept + commandLines
         return body.joinToString("\n") + "\n"
     }
+
+    fun reset(existing: String): String = "$RESET_KEEP_LINE\n"
 
     private fun lineKey(line: String): String? {
         val text = line.trim()

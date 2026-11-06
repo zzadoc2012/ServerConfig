@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.phoenixdarts.serverconfig.databinding.ActivityMainBinding
+import com.phoenixdarts.serverconfig.databinding.DialogAddConfigBinding
 import com.phoenixdarts.serverconfig.databinding.DialogSettingsBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +31,10 @@ class MainActivity : AppCompatActivity() {
         assetsRepo = AssetRepository(this)
         store = SettingsStore(this)
         setupMachines()
+        binding.resetButton.setOnClickListener { onReset() }
         binding.settingsButton.setOnClickListener { openSettings() }
         binding.copyMacButton.setOnClickListener { copyMac() }
+        binding.addConfigButton.setOnClickListener { onAddConfig() }
         binding.runButton.setOnClickListener { onRun() }
         binding.machineSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         labels.addAll(assetsRepo.machines.map { it.label() })
         binding.machineSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, labels)
         fillConfigs(null)
+        setResetEnabled()
     }
 
     private fun selectedMachine(): Machine? {
@@ -67,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             binding.machineInfo.text = "위치: -"
             binding.copyMacButton.isEnabled = false
             fillConfigs(null)
+            setResetEnabled()
             return
         }
         when (machine.checkboxType()) {
@@ -81,16 +86,17 @@ class MainActivity : AppCompatActivity() {
         binding.machineInfo.text = "위치: $location  |  IP: ${machine.ip}  |  MAC: $macText"
         binding.copyMacButton.isEnabled = currentMac.isNotBlank()
         fillConfigs(machine.excelColumn())
+        setResetEnabled()
     }
 
-    private fun fillConfigs(column: String?) {
+    private fun fillConfigs(column: String?, keepName: String? = null) {
         val names = mutableListOf(getString(R.string.config_placeholder))
         if (column != null) {
             names.addAll(assetsRepo.configsFor(column).map { it.name })
         }
         binding.configSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, names)
-        binding.configSpinner.setSelection(0)
-        binding.preview.text = ""
+        val keepIndex = keepName?.let { names.indexOf(it) } ?: -1
+        binding.configSpinner.setSelection(if (keepIndex > 0) keepIndex else 0)
         binding.configSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 refreshPreview()
@@ -98,6 +104,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
+        refreshPreview()
     }
 
     private fun refreshPreview() {
@@ -154,18 +161,52 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun onAddConfig() {
+        val dialogBinding = DialogAddConfigBinding.inflate(layoutInflater)
+        AlertDialog.Builder(this)
+            .setTitle("컨피그 추가")
+            .setView(dialogBinding.root)
+            .setPositiveButton("저장") { _, _ ->
+                val name = dialogBinding.configName.text.toString()
+                val values = mapOf(
+                    "VSS/VSP" to dialogBinding.valueVss.text.toString(),
+                    "S4" to dialogBinding.valueS4.text.toString(),
+                    "VSX" to dialogBinding.valueVsx.text.toString(),
+                    "MAX" to dialogBinding.valueMax.text.toString(),
+                )
+                try {
+                    assetsRepo.add(name, values)
+                } catch (exc: Exception) {
+                    Toast.makeText(this, exc.message ?: "저장하지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+                appendLog("컨피그를 추가했습니다: $name")
+                val column = selectedMachine()?.excelColumn()
+                fillConfigs(column, name)
+                if (column != null && assetsRepo.configsFor(column).none { it.name == name }) {
+                    Toast.makeText(this, "저장했습니다. 선택한 머신 타입 열이 비어 있어 목록에는 보이지 않습니다.", Toast.LENGTH_LONG).show()
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun onReset() {
+        val machine = selectedMachine() ?: return
+        AlertDialog.Builder(this)
+            .setTitle("컨피그 초기화")
+            .setMessage("Cam:Use:Online=1 을 제외하고 모든 컨피그를 삭제합니다.")
+            .setPositiveButton("확인") { _, _ ->
+                startJob(machine, ConfigMerge.RESET_KEEP_LINE, replace = true, action = "컨피그 초기화")
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
     private fun onRun() {
-        if (running) {
-            Toast.makeText(this, "이미 작업이 진행 중입니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
         val machine = selectedMachine()
         if (machine == null) {
             Toast.makeText(this, "머신을 선택하세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (machine.mac.isBlank()) {
-            Toast.makeText(this, "${machine.label()}의 MAC이 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
         val position = binding.configSpinner.selectedItemPosition
@@ -177,6 +218,18 @@ class MainActivity : AppCompatActivity() {
         val configText = assetsRepo.configs.first { it.name == configName }.valueFor(machine.excelColumn())
         if (configText.isBlank()) {
             Toast.makeText(this, "선택한 컨피그 셀이 비어 있습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        startJob(machine, configText, replace = false, action = "컨피그 적용")
+    }
+
+    private fun startJob(machine: Machine, configText: String, replace: Boolean, action: String) {
+        if (running) {
+            Toast.makeText(this, "이미 작업이 진행 중입니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (machine.mac.isBlank()) {
+            Toast.makeText(this, "${machine.label()}의 MAC이 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
         val live = binding.envLive.isChecked
@@ -192,21 +245,23 @@ class MainActivity : AppCompatActivity() {
         if (live) {
             AlertDialog.Builder(this)
                 .setTitle("라이브 환경 확인")
-                .setMessage("라이브 어드민에 접속하여 컨피그를 적용합니다.\n주소: ${account.address}\n머신: ${machine.label()}\n계속할까요?")
-                .setPositiveButton("예") { _, _ -> startRun(account, machine, configText) }
+                .setMessage("라이브 어드민에 접속하여 ${action}합니다.\n주소: ${account.address}\n머신: ${machine.label()}\n계속할까요?")
+                .setPositiveButton("예") { _, _ -> startRun(account, machine, configText, replace) }
                 .setNegativeButton("아니오") { _, _ -> appendLog("라이브 실행을 취소했습니다.") }
                 .show()
             return
         }
-        startRun(account, machine, configText)
+        startRun(account, machine, configText, replace)
     }
 
-    private fun startRun(account: Account, machine: Machine, configText: String) {
+    private fun startRun(account: Account, machine: Machine, configText: String, replace: Boolean) {
         running = true
         binding.runButton.isEnabled = false
+        setResetEnabled()
         binding.logView.text = ""
         appendLog("머신: ${machine.label()}")
         appendLog("환경: " + if (binding.envLive.isChecked) "라이브 어드민" else "테스트 어드민")
+        if (replace) appendLog("컨피그 초기화: ${ConfigMerge.RESET_KEEP_LINE} 만 남깁니다.")
         lifecycleScope.launch {
             try {
                 withContext(Dispatchers.IO) {
@@ -216,9 +271,9 @@ class MainActivity : AppCompatActivity() {
                         account.password,
                         machine.mac,
                         configText,
-                    ) { message ->
-                        runOnUiThread { appendLog(message) }
-                    }
+                        { message -> runOnUiThread { appendLog(message) } },
+                        replace,
+                    )
                 }
                 Toast.makeText(this@MainActivity, "작업을 완료했습니다.", Toast.LENGTH_SHORT).show()
             } catch (exc: Exception) {
@@ -227,8 +282,13 @@ class MainActivity : AppCompatActivity() {
             } finally {
                 running = false
                 binding.runButton.isEnabled = true
+                setResetEnabled()
             }
         }
+    }
+
+    private fun setResetEnabled() {
+        binding.resetButton.isEnabled = selectedMachine() != null && !running
     }
 
     private fun appendLog(message: String) {

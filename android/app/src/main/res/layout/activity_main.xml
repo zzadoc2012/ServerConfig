@@ -19,6 +19,13 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="컨피그 초기화" />
+
+        <Button
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,10 +121,24 @@
                 android:text="컨피그 선택"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/configSpinner"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp" />
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/configSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/addConfigButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="추가" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/runButton"

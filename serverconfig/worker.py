@@ -8,7 +8,16 @@ class RunWorker(QThread):
     finished_ok = pyqtSignal(str)
     failed = pyqtSignal(str)
 
-    def __init__(self, browser: str, url: str, user_id: str, password: str, mac: str, config_text: str) -> None:
+    def __init__(
+        self,
+        browser: str,
+        url: str,
+        user_id: str,
+        password: str,
+        mac: str,
+        config_text: str,
+        replace: bool = False,
+    ) -> None:
         super().__init__()
         self.browser = browser
         self.url = url
@@ -16,6 +25,7 @@ class RunWorker(QThread):
         self.password = password
         self.mac = mac
         self.config_text = config_text
+        self.replace = replace
         self._automation: AdminAutomation = None
 
     def run(self) -> None:
@@ -23,7 +33,14 @@ class RunWorker(QThread):
         self._automation = automation
         try:
             automation.start()
-            automation.run(self.url, self.user_id, self.password, self.mac, self.config_text)
+            automation.run(
+                self.url,
+                self.user_id,
+                self.password,
+                self.mac,
+                self.config_text,
+                replace=self.replace,
+            )
             self.finished_ok.emit("작업을 완료했습니다.")
         except AutomationError as exc:
             self.failed.emit(str(exc))

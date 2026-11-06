@@ -1,9 +1,10 @@
+import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from openpyxl import load_workbook
 
-from serverconfig.paths import data_file
+from serverconfig.paths import app_dir, data_file
 
 TYPE_HEADERS = ("VSS/VSP", "S4", "VSX", "MAX")
 
@@ -54,6 +55,37 @@ class ConfigWorkbook:
             if has_value:
                 names.append(name)
         return names
+
+    def add(self, name: str, values: Dict[str, str]) -> None:
+        name = (name or "").strip()
+        if not name:
+            raise ValueError("Config Name을 입력하세요.")
+        if name in self.rows:
+            raise ValueError("같은 Config Name이 이미 있습니다.")
+        cleaned = {header: normalize_config_text(values.get(header, "")) for header in TYPE_HEADERS}
+        if not any(cleaned.values()):
+            raise ValueError("VSS/VSP, S4, VSX, MAX 중 하나 이상 입력하세요.")
+        self._ensure_writable()
+        workbook = load_workbook(self.path)
+        try:
+            sheet = workbook.active
+            header_map = self._header_map(next(sheet.iter_rows(min_row=1, max_row=1, values_only=True)))
+            row_idx = sheet.max_row + 1
+            sheet.cell(row_idx, header_map["Config Name"] + 1, name)
+            for header in TYPE_HEADERS:
+                sheet.cell(row_idx, header_map[header] + 1, cleaned[header])
+            workbook.save(self.path)
+        finally:
+            workbook.close()
+        self.reload()
+
+    def _ensure_writable(self) -> None:
+        sidecar = app_dir() / "data" / "config.xlsx"
+        if self.path.resolve() == sidecar.resolve():
+            return
+        sidecar.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(self.path, sidecar)
+        self.path = sidecar
 
     @staticmethod
     def _header_map(header_row) -> Dict[str, int]:

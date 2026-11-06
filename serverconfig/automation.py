@@ -71,6 +71,13 @@ def merge_config(existing: str, incoming: str) -> str:
     return "\n".join(kept) + "\n" + "\n".join(command_lines) + "\n"
 
 
+RESET_KEEP_LINE = "Cam:Use:Online=1"
+
+
+def reset_config(existing: str) -> str:
+    return RESET_KEEP_LINE + "\n"
+
+
 SAVE_CONFIG_JS = """
 var seq = arguments[0];
 var text = arguments[1];
@@ -226,14 +233,22 @@ class AdminAutomation:
         finally:
             self.driver = None
 
-    def run(self, url: str, user_id: str, password: str, mac: str, config_text: str) -> None:
+    def run(
+        self,
+        url: str,
+        user_id: str,
+        password: str,
+        mac: str,
+        config_text: str,
+        replace: bool = False,
+    ) -> None:
         if not self.driver:
             raise AutomationError("브라우저가 준비되지 않았습니다.")
         self._open(url)
         self._login(user_id, password)
         self._open_machine_page()
         self._search_mac(mac)
-        self._apply_config(config_text)
+        self._apply_config(config_text, replace=replace)
         self._step(8, "작업을 완료했습니다.")
 
     def _open(self, url: str) -> None:
@@ -357,7 +372,7 @@ class AdminAutomation:
         except TimeoutException:
             return False
 
-    def _apply_config(self, config_text: str) -> None:
+    def _apply_config(self, config_text: str, replace: bool = False) -> None:
         areas = self.driver.find_elements(*CONFIG_TEXTAREA)
         if not areas:
             raise AutomationError("검색 결과의 Config 입력란을 찾지 못했습니다.")
@@ -367,7 +382,7 @@ class AdminAutomation:
             raise AutomationError("Config 입력란 ID를 확인하지 못했습니다.")
         machine_seq = area_id.replace("txt_config_memo_", "", 1)
         existing = area.get_attribute("value") or ""
-        merged = merge_config(existing, config_text)
+        merged = reset_config(existing) if replace else merge_config(existing, config_text)
         self._step(7, "선택한 설정을 저장합니다.")
         self.driver.execute_script(
             "arguments[0].scrollIntoView({block:'center'});"

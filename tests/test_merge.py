@@ -4,7 +4,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from serverconfig.automation import merge_config
+from serverconfig.automation import merge_config, reset_config
+from serverconfig.source_export import build_source_text
 
 
 def main() -> None:
@@ -25,6 +26,13 @@ def main() -> None:
     )
     assert same_key_twice.count("PxHistory:Enable=") == 1
     assert "PxHistory:Enable=true" in same_key_twice
+
+    cleared = reset_config("PxHistory:Enable=true\nCam:Use:Online=1\n$Coin:FreePlay=1\n")
+    assert cleared == "Cam:Use:Online=1\n"
+    assert reset_config("") == "Cam:Use:Online=1\n"
+    dump = build_source_text()
+    assert "def merge_config" in dump
+    assert "class MainActivity" in dump
     print("merge_ok")
 
 

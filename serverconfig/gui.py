@@ -27,7 +27,8 @@ from PyQt5.QtWidgets import (
 )
 
 from serverconfig import APP_TITLE
-from serverconfig.excel_loader import ConfigWorkbook
+from serverconfig.automation import RESET_KEEP_LINE
+from serverconfig.excel_loader import TYPE_HEADERS, ConfigWorkbook
 from serverconfig.machines import (
     CHECKBOX_TYPES,
     checkbox_type,
@@ -108,10 +109,16 @@ ACCOUNT_LABELS = {
 def korean_buttons(box: QMessageBox) -> None:
     yes = box.button(QMessageBox.Yes)
     no = box.button(QMessageBox.No)
+    ok = box.button(QMessageBox.Ok)
+    cancel = box.button(QMessageBox.Cancel)
     if yes:
         yes.setText("예")
     if no:
         no.setText("아니오")
+    if ok:
+        ok.setText("확인")
+    if cancel:
+        cancel.setText("취소")
 
 
 class SettingsDialog(QDialog):
@@ -174,6 +181,36 @@ class SettingsDialog(QDialog):
         self.accept()
 
 
+class ConfigAddDialog(QDialog):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self.setWindowTitle("컨피그 추가")
+        self.resize(640, 560)
+        self.name_edit = QLineEdit()
+        form = QFormLayout()
+        form.addRow("Config Name", self.name_edit)
+        self.value_edits = {}
+        for header in TYPE_HEADERS:
+            edit = QTextEdit()
+            edit.setAcceptRichText(False)
+            edit.setMinimumHeight(90)
+            self.value_edits[header] = edit
+            form.addRow(header, edit)
+        buttons = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        buttons.button(QDialogButtonBox.Save).setText("저장")
+        buttons.button(QDialogButtonBox.Cancel).setText("취소")
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout = QVBoxLayout(self)
+        layout.addLayout(form)
+        layout.addWidget(buttons)
+
+    def payload(self):
+        return self.name_edit.text().strip(), {
+            header: edit.toPlainText() for header, edit in self.value_edits.items()
+        }
+
+
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -198,10 +235,14 @@ class MainWindow(QMainWindow):
         top = QHBoxLayout()
         title = QLabel(APP_TITLE)
         title.setStyleSheet("font-size: 18px; font-weight: bold;")
+        self.reset_button = QPushButton("컨피그 초기화")
+        self.reset_button.setEnabled(False)
+        self.reset_button.clicked.connect(self._on_reset)
         self.set_button = QPushButton("⚙️ 설정")
         self.set_button.clicked.connect(self._open_settings)
         top.addWidget(title)
         top.addStretch()
+        top.addWidget(self.reset_button)
         top.addWidget(self.set_button)
         layout.addLayout(top)
 
@@ -262,7 +303,12 @@ class MainWindow(QMainWindow):
         self.config_combo = QComboBox()
         style_select_combo(self.config_combo)
         self.config_combo.currentIndexChanged.connect(self._refresh_preview)
-        config_layout.addWidget(self.config_combo)
+        self.add_config_button = QPushButton("추가")
+        self.add_config_button.clicked.connect(self._add_config)
+        config_row = QHBoxLayout()
+        config_row.addWidget(self.config_combo, 1)
+        config_row.addWidget(self.add_config_button)
+        config_layout.addLayout(config_row)
         row.addWidget(config_box, 2)
         layout.addLayout(row)
 
@@ -338,6 +384,7 @@ class MainWindow(QMainWindow):
         else:
             self.machine_name_label.setText("위치: -")
         self.copy_mac_button.setEnabled(bool(self._current_mac))
+        self._set_reset_enabled()
         self._fill_configs()
 
     def _copy_mac(self) -> None:
@@ -370,6 +417,31 @@ class MainWindow(QMainWindow):
     def _open_settings(self) -> None:
         dialog = SettingsDialog(self.store, self)
         dialog.exec_()
+
+    def _add_config(self) -> None:
+        if not self.workbook:
+            QMessageBox.warning(self, "확인", "엑셀 컨피그를 읽지 못했습니다.")
+            return
+        dialog = ConfigAddDialog(self)
+        if dialog.exec_() != QDialog.Accepted:
+            return
+        name, values = dialog.payload()
+        try:
+            self.workbook.add(name, values)
+        except Exception as exc:
+            QMessageBox.warning(self, "확인", str(exc))
+            return
+        self._log("컨피그를 추가했습니다: " + name)
+        self._fill_configs(keep_selection=True)
+        index = self.config_combo.findData(name)
+        if index >= 0:
+            self.config_combo.setCurrentIndex(index)
+        else:
+            QMessageBox.information(
+                self,
+                "확인",
+                "저장했습니다. 선택한 머신 타입 열이 비어 있어 목록에는 보이지 않습니다.",
+            )
 
     def _active_column(self):
         types = self._selected_types()
@@ -410,20 +482,24 @@ class MainWindow(QMainWindow):
     def _account_key(self) -> str:
         return "live_admin" if self.env_live.isChecked() else "test_admin"
 
+    def _on_reset(self) -> None:
+        if not self._selected_machine():
+            return
+        box = QMessageBox(self)
+        box.setIcon(QMessageBox.Warning)
+        box.setWindowTitle("컨피그 초기화")
+        box.setText("Cam:Use:Online=1 을 제외하고 모든 컨피그를 삭제합니다.")
+        box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        box.setDefaultButton(QMessageBox.Cancel)
+        korean_buttons(box)
+        if box.exec_() != QMessageBox.Ok:
+            return
+        self._start_job(RESET_KEEP_LINE, replace=True, action="컨피그 초기화")
+
     def _on_run(self) -> None:
-        if self.worker and self.worker.isRunning():
-            QMessageBox.information(self, "실행 중", "이미 작업이 진행 중입니다.")
-            return
-        machine = self._selected_machine()
-        if not machine:
-            QMessageBox.warning(self, "확인", "머신을 선택하세요.")
-            return
         types = self._selected_types()
         if len(types) != 1:
             QMessageBox.warning(self, "확인", "머신 타입을 하나만 선택하세요.")
-            return
-        if not machine.get("mac"):
-            QMessageBox.warning(self, "확인", f"{machine_label(machine)}의 MAC이 없습니다. 머신 목록을 보완하세요.")
             return
         if not self.workbook:
             QMessageBox.warning(self, "확인", "엑셀 컨피그를 읽지 못했습니다.")
@@ -436,6 +512,19 @@ class MainWindow(QMainWindow):
         config_text, has_value = self.workbook.value(config_name, column)
         if not has_value:
             QMessageBox.warning(self, "확인", "선택한 컨피그 셀이 비어 있습니다.")
+            return
+        self._start_job(config_text, replace=False, action="컨피그 적용")
+
+    def _start_job(self, config_text: str, replace: bool, action: str) -> None:
+        if self.worker and self.worker.isRunning():
+            QMessageBox.information(self, "실행 중", "이미 작업이 진행 중입니다.")
+            return
+        machine = self._selected_machine()
+        if not machine:
+            QMessageBox.warning(self, "확인", "머신을 선택하세요.")
+            return
+        if not machine.get("mac"):
+            QMessageBox.warning(self, "확인", f"{machine_label(machine)}의 MAC이 없습니다. 머신 목록을 보완하세요.")
             return
         account = self.store.account(self._account_key())
         if not account.get("user_id") or not account.get("password"):
@@ -450,19 +539,21 @@ class MainWindow(QMainWindow):
             box.setIcon(QMessageBox.Question)
             box.setWindowTitle("라이브 환경 확인")
             box.setText(
-                f"라이브 어드민에 접속하여 컨피그를 적용합니다.\n주소: {url}\n머신: {machine_label(machine)}\n계속할까요?"
+                f"라이브 어드민에 접속하여 {action}합니다.\n주소: {url}\n머신: {machine_label(machine)}\n계속할까요?"
             )
             box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             box.setDefaultButton(QMessageBox.No)
             korean_buttons(box)
-            answer = box.exec_()
-            if answer != QMessageBox.Yes:
+            if box.exec_() != QMessageBox.Yes:
                 self._log("라이브 실행을 취소했습니다.")
                 return
         self.log_view.clear()
         self._log("머신: " + machine_label(machine))
         self._log("환경: " + ACCOUNT_LABELS.get(self._account_key(), account["name"]))
+        if replace:
+            self._log("컨피그 초기화: " + RESET_KEEP_LINE + " 만 남깁니다.")
         self.run_button.setEnabled(False)
+        self.reset_button.setEnabled(False)
         self.worker = RunWorker(
             self._selected_browser(),
             url,
@@ -470,6 +561,7 @@ class MainWindow(QMainWindow):
             account["password"],
             machine["mac"],
             config_text,
+            replace=replace,
         )
         self.worker.log_message.connect(self._log)
         self.worker.finished_ok.connect(self._on_done)
@@ -484,8 +576,13 @@ class MainWindow(QMainWindow):
         self._log(message)
         QMessageBox.critical(self, "실패", message)
 
+    def _set_reset_enabled(self) -> None:
+        running = bool(self.worker and self.worker.isRunning())
+        self.reset_button.setEnabled(bool(self._selected_machine()) and not running)
+
     def _restore_run_button(self) -> None:
         self.run_button.setEnabled(True)
+        self._set_reset_enabled()
 
     def closeEvent(self, event) -> None:
         if self.worker and self.worker.isRunning():

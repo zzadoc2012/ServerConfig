@@ -1,4 +1,6 @@
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,6 +33,24 @@ def main() -> None:
     assert ok and "COIN_OPTION_FREE_PLAY=Yes" in free_vsx
     vss_names = book.names_for_column(excel_column("VSS"))
     assert history in vss_names
+    with tempfile.TemporaryDirectory() as tmp:
+        copy = Path(tmp) / "config.xlsx"
+        shutil.copy(ROOT / "data" / "config.xlsx", copy)
+        writable = ConfigWorkbook(copy)
+        writable.add(
+            "테스트 추가 컨피그",
+            {"VSS/VSP": "Foo:Enable=1", "S4": "", "VSX": "Bar:Enable=1\nBaz=2", "MAX": ""},
+        )
+        vss, ok = writable.value("테스트 추가 컨피그", "VSS/VSP")
+        assert ok and vss == "Foo:Enable=1"
+        vsx, ok = writable.value("테스트 추가 컨피그", "VSX")
+        assert ok and vsx == "Bar:Enable=1\nBaz=2"
+        assert "테스트 추가 컨피그" not in writable.names_for_column("MAX")
+        try:
+            writable.add("테스트 추가 컨피그", {"VSS/VSP": "x", "S4": "", "VSX": "", "MAX": ""})
+            raise AssertionError("duplicate name")
+        except ValueError as exc:
+            assert "이미 있습니다" in str(exc)
     print("excel_ok", book.names, "vss", vss_names)
 
 

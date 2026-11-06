@@ -32,7 +32,7 @@
       "values": {
         "VSS/VSP": "",
         "S4": "",
-        "VSX": "PARTYGAME:MENU:STATE=1\nPARTYGAME:MENU:SLIDE=1\nPARTYGAME:MENU:STATE=1\nPARTYGAME:MENU:SLIDE=1\nFUNZONE_GAME_SNIPER_PLUS:Active=1\nFUNZONE_GAME_QUIZ:Active=1\nFUNZONE_GAME_ROPECLIMB:Active=1\nFUNZONE_GAME_FISHING_LITE:Active=1\nFUNZONE_GAME_MINI_COUNTUP:Active=1\nMENUSETTING_FUNZONE_SNIPER_PLUS=Enable\nMENUSETTING_FUNZONE_QUIZ=Enable\nMENUSETTING_FUNZONE_ROPECLIMB=Enable\nMENUSETTING_FUNZONE_FISHING_LITE=Enable\nMENUSETTING_FUNZONE_SNIPER_PLUS:Active=1\nMENUSETTING_FUNZONE_QUIZ:Active=1\nMENUSETTING_FUNZONE_ROPECLIMB:Active=1\nMENUSETTING_FUNZONE_FISHING_LITE:Active=1",
+        "VSX": "MENUSETTING_PARTYGAME = Enable\nPARTYGAME:MENU:SLIDE=1\n\nFUNZONE_GAME_SNIPER_PLUS:Active=1\nFUNZONE_GAME_QUIZ:Active=1\nFUNZONE_GAME_ROPECLIMB:Active=1\nFUNZONE_GAME_FISHING_LITE:Active=1\n\nMENUSETTING_PARTYGAME_SNIPER_PLUS=Enable\nMENUSETTING_PARTYGAME_QUIZ=Enable\nMENUSETTING_PARTYGAME_ROPECLIMB=Enable\nMENUSETTING_PARTYGAME_FISHING_LITE=Enable\n\nMENUSETTING_PARTYGAME_SNIPER_PLUS:Active=1\nMENUSETTING_PARTYGAME_QUIZ:Active=1\nMENUSETTING_PARTYGAME_ROPECLIMB:Active=1\nMENUSETTING_PARTYGAME_FISHING_LITE:Active=1",
         "MAX": ""
       }
     },
@@ -96,6 +96,24 @@
         "VSS/VSP": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\n$M:V:6153:Show=1\n$M:V:6153:Show=1",
         "S4": "",
         "VSX": "MENUSETTING_FUNZONE_NEWCHEERS=Enable\nMENUSETTING_FUNZONE_NEWCHEERS:Active=1\nNewCheersCanDrawBeer=false\nMENUSETTING_FUNZONE_CHEERS=Hide\nMENUSETTING_FUNZONE_CHEERS:Active=0",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "뉴치어스 게임 선택 치트 (On)",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "NewCheersSeqPlay=true",
+        "MAX": ""
+      }
+    },
+    {
+      "name": "뉴치어스 게임 선택 치트 (Off)",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "NewCheersSeqPlay=false",
         "MAX": ""
       }
     },
@@ -187,6 +205,15 @@
         "S4": "",
         "VSX": "GVMMission:Enable=true",
         "MAX": ""
+      }
+    },
+    {
+      "name": "애플드랍 크리스마스 설정 (On)",
+      "values": {
+        "VSS/VSP": "",
+        "S4": "",
+        "VSX": "",
+        "MAX": "#AppleDrop:EventType=1"
       }
     }
   ]

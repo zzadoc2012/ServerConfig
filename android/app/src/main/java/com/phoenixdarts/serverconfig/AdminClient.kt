@@ -30,6 +30,7 @@ class AdminClient {
         mac: String,
         configText: String,
         log: (String) -> Unit,
+        replace: Boolean = false,
     ) {
         val root = normalizeBase(baseUrl)
         log("1/8 접속을 준비합니다.")
@@ -45,7 +46,7 @@ class AdminClient {
         val seq = found.optString("machine_seq")
         if (seq.isBlank()) throw AdminException("검색 결과에서 machine_seq를 찾지 못했습니다.")
         val existing = found.optString("config_memo")
-        val merged = ConfigMerge.merge(existing, configText)
+        val merged = if (replace) ConfigMerge.reset(existing) else ConfigMerge.merge(existing, configText)
         log("7/8 선택한 설정을 저장합니다.")
         save(root, seq, merged)
         log("8/8 작업을 완료했습니다.")

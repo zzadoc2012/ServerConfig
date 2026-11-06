@@ -15,6 +15,9 @@ def bundled_dir() -> Path:
 
 
 def data_file(name: str) -> Path:
+    sidecar = app_dir() / "data" / name
+    if sidecar.exists():
+        return sidecar
     return bundled_dir() / "data" / name
 
 

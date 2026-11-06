@@ -18,10 +18,12 @@ python -m venv .venv
 ## exe 빌드
 
 ```
-.\.venv\Scripts\pyinstaller --noconfirm --onefile --windowed --name ServerConfig --add-data "data;data" main.py
+.\.venv\Scripts\pyinstaller --noconfirm --distpath dist\ServerConfig ServerConfig.spec
+.\.venv\Scripts\python tools\sync_dist_data.py
 ```
 
-결과 파일: `dist\ServerConfig.exe`
+결과 파일: `dist\ServerConfig\ServerConfig.exe`  
+데이터: `dist\ServerConfig\data\` (exe와 같은 폴더의 `data\config.xlsx`를 읽고 추가 저장합니다)
 
 ## 주의
 
